@@ -67,7 +67,6 @@ int main(int argc, char *argv[]) {
 	if (dummy == 2) { //Prints numbers sorted of the file
 
 		FILE *f = fopen("Numbers.txt", "r");
-		FILE *quick = fopen("sorted.txt", "w");
 
 		while ((c = fgetc(f)) != EOF) {   //gets the numbers, put them into an array
 			for (n = 0; n < 1000; n++) {
@@ -77,11 +76,13 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		quicksort(array, 101);        //sort the numbers
+		quicksort(array, 101); //sort the numbers
 
 		printf("%s", array);
 
 		if (dummy == 3) { //Puts the numbers back into a new file
+
+			FILE *quick = fopen("sorted.txt", "w");
 
 			while (array != NULL) {
 				for (n = 0; n < 101; n++) {
@@ -96,4 +97,3 @@ int main(int argc, char *argv[]) {
 		}
 	}
 }
-//TEST
