@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 		while ((c = fgetc(f)) != EOF) {   //gets the numbers, put them into an array
 			for (n = 0; n < 1000; n++) {
 				if (c != '\n') {
-					array[n] = c;
+					array[n] = c; // Error here, I don't know why! -.-
 				}
 			}
 		}
