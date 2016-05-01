@@ -45,7 +45,6 @@ void quicksort(int *array, int size)     //sorting function for the array
 			}
 		}
 	}
-	return array;
 }
 
 int* converter(char** file_data, int lines) {
@@ -87,11 +86,13 @@ int main(int argc, char *argv[]) {
 	}
 	if (dummy == 2) { //Prints numbers sorted of the file
 
+		printf("Dados ordenados:\n");
 		file_data = read_file(file_name, file_data, &lines);
+		array = converter(file_data, lines);
 		quicksort(array, lines);        //sort the numbers
 
 		for (t = 0; t < lines; t++) {
-			printf("%i\n", array);
+			printf("%i\n", array[t]);
 		}
 
 		printf("\n\n");
@@ -101,15 +102,17 @@ int main(int argc, char *argv[]) {
 
 	if (dummy == 3) { //Puts the numbers back into a new file
 
-		FILE *quick = fopen("sorted.txt", "w");
+		FILE *fp;
+		fp = fopen("sorted.txt", "w");
+		
+		file_data = read_file(file_name, file_data, &lines);
+		array = converter(file_data, lines);
+		quicksort(array, lines);        //sort the numbers
 
-		while (array != NULL) {
-			for (n = 0; n < lines; n++) {
-				fputc(array[n], quick);
-			}
+		for (t = 0; t < lines; t++) {
+			fprintf(fp, "%i\n", array[t]);
 		}
-
-		fclose(quick);
+		printf("Dados ordenados copiados para um novo ficheiro com sucesso!\n\n");
 
 		system("PAUSE");
 		return 0;
