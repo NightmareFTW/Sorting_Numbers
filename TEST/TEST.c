@@ -1,35 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void handle_line(char *line) {
-	printf("%s", line);
-}
+char** read_file(char* nome_ficheiro, char** data, int* linha) { //reads the file
 
-int read_file() { //reads the file
-	int size = 1000, pos;
-	int c;
-	char *buffer = (char *)malloc(size);
-
-	FILE *f = fopen("Numbers.txt", "r");
-	if (f) {
-		do {
-			pos = 0;
-			do {
-				c = fgetc(f);
-				if (c != EOF) buffer[pos++] = (char)c;
-				if (pos >= size - 1) {
-					size *= 2;
-					buffer = (char*)realloc(buffer, size);
-				}
-			} while (c != EOF && c != '\n');
-			buffer[pos] = 0;
-
-			handle_line(buffer);
-		} while (c != EOF);
-		fclose(f);
+	FILE *f = fopen(nome_ficheiro, "r");
+	if (f == NULL) {
+		printf("Erro ao abrir ficheiro\n");
+		return NULL;
 	}
-	free(buffer);
-	return 0;
+
+	char buffer[200];
+	*linha = 0;
+
+	data = malloc(sizeof(char*));
+	if (data == NULL) {
+		printf("Erro ao allocar memoria\n");
+		return NULL;
+	}
+
+	while (fgets(buffer, 200, f) != NULL) {
+		*linha = *linha + 1;
+		data = realloc(data, *linha * sizeof(char*));
+		data[*linha - 1] = malloc(strlen(buffer) * sizeof(char));
+		if (data == NULL || data[*linha - 1] == NULL) {
+			printf("Erro ao allocar memoria");
+			return NULL;
+		}
+		strcpy(data[*linha - 1], buffer);
+	}
+	fclose(f);
+	return data;
 }
 
 void quicksort(int *array, int size)     //sorting function for the array
@@ -50,17 +50,25 @@ void quicksort(int *array, int size)     //sorting function for the array
 int main(int argc, char *argv[]) {
 	char sl = 178;
 	int dummy;
-	
+
 	char c;
 	int n;
 	int array[101];
+
+	char **file_data = NULL;
+	char *file_name = "Numbers.txt";
+	int lines;
+	file_data = read_file(file_name, file_data, &lines);
 
 	printf("Menu: \n%c1%c Ver tabela original\n%c2%c Ver tabela ordenada\n%c3%c Escrever a tabela ordenada para o ficheiro\n\n", sl, sl, sl, sl, sl, sl);
 	scanf("%i", &dummy);
 	printf("\n");
 
 	if (dummy == 1) { //Prints numbers of the file
-		read_file();
+		read_file(file_name, file_data, &lines);
+		for (n = 0; n < lines; n++) {
+			printf("%s", file_data[n]);
+		}
 		printf("\n\n");
 		system("pause");
 	}
@@ -76,7 +84,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		quicksort(array, 101); //sort the numbers
+		quicksort(array, 101);        //sort the numbers
 
 		printf("%s", array);
 
