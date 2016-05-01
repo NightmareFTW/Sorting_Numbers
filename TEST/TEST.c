@@ -37,7 +37,7 @@ void quicksort(int *array, int size)     //sorting function for the array
 	int a, b, temp;
 
 	for (a = 0; a < (size - 1); a++) {
-		for (b = a = 1; b < size; b++) {
+		for (b = a + 1; b < size; b++) {
 			if (array[a] > array[b]) {
 				temp = array[b];
 				array[b] = array[a];
@@ -55,7 +55,7 @@ int* converter(char** file_data, int lines) {
 	for (i = 0; i < lines; i++) {
 		array[i] = atoi(file_data[i]);
 	}
-	return array[i];
+	return array;
 }
 
 
@@ -65,13 +65,12 @@ int main(int argc, char *argv[]) {
 
 	char c;
 	int n;
+	int t;
 
 	char **file_data = NULL;
 	char *file_name = "Numbers.txt";
-	int lines;
-	int array[200];
-	int t;
-
+	int lines = NULL;
+	int* array = converter(file_data, lines);
 	char data = NULL;
 
 	printf("Menu: \n%c1%c Ver tabela original\n%c2%c Ver tabela ordenada\n%c3%c Escrever a tabela ordenada para o ficheiro\n\n", sl, sl, sl, sl, sl, sl);
@@ -89,7 +88,6 @@ int main(int argc, char *argv[]) {
 	if (dummy == 2) { //Prints numbers sorted of the file
 
 		file_data = read_file(file_name, file_data, &lines);
-		int* array = converter(file_data, lines);
 		quicksort(array, lines);        //sort the numbers
 
 		for (t = 0; t < lines; t++) {
