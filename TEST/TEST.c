@@ -36,8 +36,8 @@ void quicksort(int *array, int size)     //sorting function for the array
 {
 	int a, b, temp;
 
-	for (a = 0; a<(size - 1); a++) {
-		for (b = a = 1; b<size; b++) {
+	for (a = 0; a < (size - 1); a++) {
+		for (b = a = 1; b < size; b++) {
 			if (array[a] > array[b]) {
 				temp = array[b];
 				array[b] = array[a];
@@ -45,7 +45,19 @@ void quicksort(int *array, int size)     //sorting function for the array
 			}
 		}
 	}
+	return array;
 }
+
+int* converter(char** file_data, int lines) {
+	int array[200];
+	int i = 0;
+
+	for (i = 0; i < lines; i++) {
+		array[i] = atoi(file_data[i]);
+	}
+	return array[i];
+}
+
 
 int main(int argc, char *argv[]) {
 	char sl = 178;
@@ -53,12 +65,14 @@ int main(int argc, char *argv[]) {
 
 	char c;
 	int n;
-	int array[101];
 
 	char **file_data = NULL;
 	char *file_name = "Numbers.txt";
 	int lines;
-	file_data = read_file(file_name, file_data, &lines);
+	int array[200];
+	int t;
+
+	char data = NULL;
 
 	printf("Menu: \n%c1%c Ver tabela original\n%c2%c Ver tabela ordenada\n%c3%c Escrever a tabela ordenada para o ficheiro\n\n", sl, sl, sl, sl, sl, sl);
 	scanf("%i", &dummy);
@@ -74,34 +88,32 @@ int main(int argc, char *argv[]) {
 	}
 	if (dummy == 2) { //Prints numbers sorted of the file
 
-		FILE *f = fopen("Numbers.txt", "r");
+		file_data = read_file(file_name, file_data, &lines);
+		int* array = converter(file_data, lines);
+		quicksort(array, lines);        //sort the numbers
 
-		while ((c = fgetc(f)) != EOF) {   //gets the numbers, put them into an array
-			for (n = 0; n < 1000; n++) {
-				if (c != '\n') {
-					array[n] = c; // Error here, I don't know why! -.-
-				}
+		for (t = 0; t < lines; t++) {
+			printf("%i\n", array);
+		}
+
+		printf("\n\n");
+		system("pause");
+
+	}
+
+	if (dummy == 3) { //Puts the numbers back into a new file
+
+		FILE *quick = fopen("sorted.txt", "w");
+
+		while (array != NULL) {
+			for (n = 0; n < lines; n++) {
+				fputc(array[n], quick);
 			}
 		}
 
-		quicksort(array, 101);        //sort the numbers
+		fclose(quick);
 
-		printf("%s", array);
-
-		if (dummy == 3) { //Puts the numbers back into a new file
-
-			FILE *quick = fopen("sorted.txt", "w");
-
-			while (array != NULL) {
-				for (n = 0; n < 101; n++) {
-					fputc(array[n], quick);
-				}
-			}
-
-			fclose(quick);
-
-			system("PAUSE");
-			return 0;
-		}
+		system("PAUSE");
+		return 0;
 	}
 }
